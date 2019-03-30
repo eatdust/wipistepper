@@ -38,7 +38,6 @@ rpmps = 180
 motor.softrun_while('clk',msrun=5000,rpm=rpm,rpmps=rpmps)
 motor.pwmrun_while('clk',msrun=5000,rpm=rpm,rpmps=rpmps)
 
-rpm=720
 rpmps=180
 nframe = 10
 motor.softrun_to('clk',degrun=(2*nframe-1)*180.0,degramp=90.0,rpmps=rpmps)

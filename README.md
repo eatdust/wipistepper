@@ -31,14 +31,12 @@ defWiring = {'enable':0,'clock':1,'direction':2}
 
 defines a dictionary, *defWiring*, that says that the power cable is
 connected to the pin 0 of the RPI, the clock to the pin 1 and
-direction to pin 2. This numbering is the ('wiringPi'
-numbering)[http://wiringpi.com/pins], but this can be changed (see
+direction to pin 2. This numbering is the ['wiringPi'
+numbering](http://wiringpi.com/pins), but this can be changed (see
 wipidrive.py).
 
--
 NB: If you want to be able to reach high clock frequencies using the
     RPI pulse width modulator, you must connect the clock on pin 1 (BCM_GPIO 18)
--
 
 ```python
 defStates = {'enable':wp.LOW,'clock':wp.LOW,'direction':wp.LOW}
@@ -47,8 +45,8 @@ defStates = {'enable':wp.LOW,'clock':wp.LOW,'direction':wp.LOW}
 defines a dictionary, *defStates*, encoding the initial voltages sent
 to the 'enable', 'clock' and 'direction' wires.
 
-Various other hardware settings can be changed during the
-initialization of a driver object:
+Various other hardware settings can be set during the initialization
+of a driver object:
 
 ```python
 def __init__(self,name='',wiring=defWiring,states=defStates,
@@ -57,7 +55,113 @@ def __init__(self,name='',wiring=defWiring,states=defStates,
 ```				  
 
 Notice that *pulsewidth* refers to software generated clock signals
-and *clockwidth* and *range* are for the Pulse Width Modulator (PWM).
+while *clockwidth* and *range* are for the Pulse Width Modulator
+(PWM). The *stepmode* in which the driver board is running should be
+properly set, it obviously encodes by how much a connected stepper
+motor will be running for a given number of pulses.
 
+---
 
 ### Motor initialization
+
+The *motor* class is derived from the *driver* class and all the above
+settings can be provided during the initialization of a motor object.
+
+```python
+
+import wipidrive as wd
+
+def __init__(self,drivername='', motorname='',
+                 wiring=wd.defWiring, states=wd.defStates,
+                 stepmode=wd.defStepMode,
+		 pulsewidth=wd.defPulseWidth,
+	         clockwidth=wd.defClockWidth,
+		 range=wd.defRange,
+		 stepangle=defStepAngle):
+```
+
+In addition, a *motor* object comes with its own properties. Don't
+forget to check the value of the step angle, by which angle the stepper
+tilts with one pulse in stepmode=1?
+
+```python
+defStepAngle = 1.8 #in degrees
+```
+
+---
+
+### Working example
+
+Let's analyze the example provided, "steppertest.py"
+
+```python
+#!/usr/bin/python
+import wipidrive as wd
+import wipimotor as wm
+import time as time
+
+connections={'en':0,'clk':1,'cw':2}
+defaultvalues={'en':1,'clk':0,'cw':0}
+
+motor = wm.motor(drivername='TB65603A',motorname='QSH6018-65-28-210',
+                 wiring=connections, states=defaultvalues,
+		 stepmode=8, pulsewidth=10,
+		 clockwidth=8,
+                 range=4096,
+		 stepangle=1.8)
+
+```
+
+We specify that we have connected the "en", "clk" and "cw" driver
+board cables to the RPI pins 0, 1 and 2, respectively. Their name are
+yours, here "en" for "enable", "clk" for "clock", "cw" for "clockwise"
+rotation. Voltages states along these wires are initially set to "1",
+"0", "0" (My board switches the motor off for en=1).
+
+The driver board is in stepmode=8, the motor has a step angle of 1.8
+degrees and we want to generate software pulses of 10 milliseconds
+width (these should be set to what the driving board is capable
+of). For the PWM, a pulse width of 8 milliseconds is set over a range
+of 4096.
+
+
+```python
+
+motor.switch('en')
+
+rpm = 360
+rpmps = 180
+motor.softrun_while('clk',msrun=5000,rpm=rpm,rpmps=rpmps)
+motor.pwmrun_while('clk',msrun=5000,rpm=rpm,rpmps=rpmps)
+
+```
+
+The first instruction energizes the motor (flip state on 'en'). Then
+we want to reach an angular speed of rpm=360 rotations per minute with an
+acceleration of rpmps=180, rpm per second. Therefore, cruising speed
+will be reached after 2 seconds.
+
+The method *motor.softrun_while()* ensures that the right clock
+signals are sent to the driver to accelerate the motor to rpm with
+rpmps acceleration during 5000 milliseconds. Then the motor
+decelerate to stop. Pulses are software generated, then, there not
+very accurate and some can be skipped due to the operating system. You
+won't be able to reach high speed to software generated pulses.
+
+The method *motor.pwnrun_while()* does exactly the same using the
+PWM of the RPI, clock frequency can go up to a few MHz.
+
+
+```python
+
+rpmps=180
+nframe = 10
+motor.softrun_to('clk',degrun=(2*nframe-1)*180.0,degramp=90.0,rpmps=rpmps)
+
+motor.reset()
+
+```
+
+The method *motor.softun_to()* allows to move the motor by a given
+angle (degrun) with a given acceleration (rpmps) which applies only during
+some ramp angle spawn (degramp)
