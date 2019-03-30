@@ -115,14 +115,14 @@ motor = wm.motor(drivername='TB65603A',motorname='QSH6018-65-28-210',
 We specify that we have connected the "en", "clk" and "cw" driver
 board cables to the RPI pins 0, 1 and 2, respectively. Their name are
 yours, here "en" for "enable", "clk" for "clock", "cw" for "clockwise"
-rotation. Voltages states along these wires are initially set to "1",
-"0", "0" (My board switches the motor off for en=1).
+rotation. Voltage states for these wires are initially set to 1,
+0, 0 (My board switches the motor off for en=1).
 
 The driver board is in stepmode=8, the motor has a step angle of 1.8
 degrees and we want to generate software pulses of 10 milliseconds
-width (these should be set to what the driving board is capable
-of). For the PWM, a pulse width of 8 milliseconds is set over a range
-of 4096.
+width (these should be set to what the driving board is capable of
+understanding as a pulse). For the PWM, a pulse width of 8
+milliseconds is set over a range of 4096.
 
 
 ```python
@@ -141,15 +141,17 @@ we want to reach an angular speed of rpm=360 rotations per minute with an
 acceleration of rpmps=180, rpm per second. Therefore, cruising speed
 will be reached after 2 seconds.
 
-The method *motor.softrun_while()* ensures that the right clock
-signals are sent to the driver to accelerate the motor to rpm with
-rpmps acceleration during 5000 milliseconds. Then the motor
-decelerate to stop. Pulses are software generated, then, there not
-very accurate and some can be skipped due to the operating system. You
-won't be able to reach high speed to software generated pulses.
+The method *motor.softrun_while()* ensures that the clock signals are
+sent to the driver, through the 'clk' wire, to accelerate the motor to
+*rpm* angular speed with a *rpmps* acceleration. The motor will stay
+at maximum speed during 5000 milliseconds. Then it decelerates and
+stop. Pulses are software generated, they are not very accurate and
+some can be skipped depending on what orders the operating system. You
+won't be able to reach high speed with software generated pulses.
 
 The method *motor.pwnrun_while()* does exactly the same using the
-PWM of the RPI, clock frequency can go up to a few MHz.
+PWM of the RPI, clock frequency can go up to a few MHz and you can
+easily reach more than 1000 rpm, provided your stepper keeps it torque.
 
 
 ```python
@@ -163,5 +165,5 @@ motor.reset()
 ```
 
 The method *motor.softun_to()* allows to move the motor by a given
-angle (degrun) with a given acceleration (rpmps) which applies only during
-some ramp angle spawn (degramp)
+angle (degrun) with a given acceleration (rpmps) that applies only during
+some ramp angle (degramp).
