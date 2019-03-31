@@ -9,20 +9,21 @@ Wipistepper provides two python modules, **wipidrive** and
 to control stepper motors and their drivers by using a Raspberry Pi.
 
 Please ensure that you have a working installation of
-[wiringpi](http://wiringpi.com/) as well as its python wrappers [WiringPi-Python](https://github.com/WiringPi/WiringPi-Python)
+[wiringpi](http://wiringpi.com/) as well as its python wrappers
+[WiringPi-Python](https://github.com/WiringPi/WiringPi-Python).
 
 ---
 
 ### Driver initialization
 
-High currents stepper motors are usually connected to a *driving*
+High currents stepper motors are usually connected to a **driving**
 electronic board, which itself can be controled from the Raspberry
 Pi.
 
 Wiring between the driver board and the RPI are up to you, but should
 be specified during the initialization of a *driver* object within the
 **wipidrive** class. The default initialization assumes 3 cables, one
-for the driver power state (enable), one for triggering pulses
+for the power state (enable), one for triggering pulses
 (clock), and one for setting the direction (direction).
 
 ```python
@@ -36,14 +37,14 @@ numbering](http://wiringpi.com/pins), but this can be changed (see
 wipidrive.py).
 
 NB: If you want to be able to reach high clock frequencies using the
-    RPI pulse width modulator, you must connect the clock on pin 1 (BCM_GPIO 18)
+RPI pulse width modulator, you must connect the clock on pin 1 (BCM_GPIO 18)
 
 ```python
 defStates = {'enable':wp.LOW,'clock':wp.LOW,'direction':wp.LOW}
 ```
 
 defines a dictionary, *defStates*, encoding the initial voltages sent
-to the 'enable', 'clock' and 'direction' wires.
+to the 'enable', 'clock' and 'direction' gates of the driving board.
 
 Various other hardware settings can be set during the initialization
 of a driver object:
@@ -81,8 +82,8 @@ def __init__(self,drivername='', motorname='',
 ```
 
 In addition, a *motor* object comes with its own properties. Don't
-forget to check the value of the step angle, by which angle the stepper
-tilts with one pulse in stepmode=1?
+forget to check the value of the step angle, the angle by which the stepper
+tilts when receiving  one pulse in stepmode=1. The default is:
 
 ```python
 defStepAngle = 1.8 #in degrees
@@ -113,16 +114,16 @@ motor = wm.motor(drivername='TB65603A',motorname='QSH6018-65-28-210',
 ```
 
 We specify that we have connected the "en", "clk" and "cw" driver
-board cables to the RPI pins 0, 1 and 2, respectively. Their name are
+gates to the RPI pins 0, 1 and 2, respectively. Their name are
 yours, here "en" for "enable", "clk" for "clock", "cw" for "clockwise"
 rotation. Voltage states for these wires are initially set to 1,
-0, 0 (My board switches the motor off for en=1).
+0, 0 (my board wiring switches the motor off for en=1).
 
 The driver board is in stepmode=8, the motor has a step angle of 1.8
 degrees and we want to generate software pulses of 10 milliseconds
-width (these should be set to what the driving board is capable of
-understanding as a pulse). For the PWM, a pulse width of 8
-milliseconds is set over a range of 4096.
+width (these should be set to what the driving board is capable of).
+For the PWM, a pulse width of 8 milliseconds is set over a range of
+4096.
 
 
 ```python
@@ -136,22 +137,25 @@ motor.pwmrun_while('clk',msrun=5000,rpm=rpm,rpmps=rpmps)
 
 ```
 
-The first instruction energizes the motor (flip state on 'en'). Then
-we want to reach an angular speed of rpm=360 rotations per minute with an
-acceleration of rpmps=180, rpm per second. Therefore, cruising speed
+The first instruction energizes the motor (flip state on gate 'en'). Then
+we want to reach an angular speed of *rpm=360* rotations per minute with an
+acceleration of *rpmps=180* rpm per second. Therefore, cruising speed
 will be reached after 2 seconds.
 
-The method *motor.softrun_while()* ensures that the clock signals are
-sent to the driver, through the 'clk' wire, to accelerate the motor to
-*rpm* angular speed with a *rpmps* acceleration. The motor will stay
-at maximum speed during 5000 milliseconds. Then it decelerates and
-stop. Pulses are software generated, they are not very accurate and
-some can be skipped depending on what orders the operating system. You
-won't be able to reach high speed with software generated pulses.
+The method *motor.softrun_while()* generates clock pulses sent to the
+driver, through the 'clk' gate, to accelerate the motor to *rpm*
+angular speed with a *rpmps* acceleration. The motor will stay at
+maximum speed during *msrun=5000* milliseconds. Then it decelerates
+and stop. Pulses are software generated, they are not very accurate
+and some can be skipped depending on what the operating system is
+prioritizing. You won't be able to reach high speed with software
+generated pulses.
 
 The method *motor.pwnrun_while()* does exactly the same using the
 PWM of the RPI, clock frequency can go up to a few MHz and you can
-easily reach more than 1000 rpm, provided your stepper keeps it torque.
+easily reach more than 1000 rpm, provided your stepper keeps it
+torque at high speed. To understand the RPI's PWM, have a look to the [wiringpi
+doc](http://wiringpi.com/reference/raspberry-pi-specifics/).
 
 
 ```python
@@ -175,15 +179,22 @@ some ramp angle (degramp).
 I have been developping these modules to control an old 16mm film
 projector that has been transformed into a HDR film scanner :)
 
-The stepper allows to move the film frame per frame at a very low
+The stepper allows to move and scan the film frame per frame at a very low
 speed, as well as running it full speed at 24 frames/second, i.e., up to
 1440 rpm, to actually project the movie.
 
-Here a picture of the driving board, the RPI and the stepper as well
-as the wiring used.
+Here a picture of the stepper motor, the driver board and the RPI:
 
-
+---
 ![stepper](/docs/stepdriverpi.jpg?raw=true)
+---
 
-It takes some time and attention to localize the
-correct GPIO pins, but nothing more is required.
+It takes some time and attention to localize the correct GPIO pins,
+but nothing more is required. A zoom on the wiring used (caution: your
+driving board may require a completely different one)
+
+---
+![wiring](/docs/wiring.jpg?raw=true)
+---
+
+For the film scanner code, see [goscan](https://github.com/eatdust/goscan).
