@@ -183,7 +183,7 @@ Here a picture of the driving board, the RPI and the stepper as well
 as the wiring used.
 
 
-[stepper](/docs/stepdriverpi.jpg?raw=true)
+![stepper](/docs/stepdriverpi.jpg?raw=true)
 
 It takes some time and attention to localize the
 correct GPIO pins, but nothing more is required.
