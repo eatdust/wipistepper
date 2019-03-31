@@ -182,9 +182,8 @@ speed, as well as running it full speed at 24 frames/second, i.e., up to
 Here a picture of the driving board, the RPI and the stepper as well
 as the wiring used.
 
-<p>
+
 [stepper](/docs/stepdriverpi.jpg?raw=true)
-</p>
 
 It takes some time and attention to localize the
 correct GPIO pins, but nothing more is required.
