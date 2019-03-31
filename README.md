@@ -167,3 +167,22 @@ motor.reset()
 The method *motor.softun_to()* allows to move the motor by a given
 angle (degrun) with a given acceleration (rpmps) that applies only during
 some ramp angle (degramp).
+
+---
+
+### Real world example
+
+I have been developping these modules to control an old 16mm film
+projector that has been transformed into a HDR film scanner :)
+
+The stepper allows to move the film frame per frame at a very low
+speed, as well as running it full speed at 24 frames/second, i.e., up to
+1440 rpm, to actually project the movie.
+
+Here a picture of the driving board, the RPI and the stepper as well
+as the wiring used.
+
+![stepper](/tmp/stepdrivpi.jpg)
+
+It takes some time and attention to localize the
+correct GPIO pins, but nothing more is required.

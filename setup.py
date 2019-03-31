@@ -30,5 +30,5 @@ setup(
     description="High level controls for serious steppers",
     license="GPLv3",
     keywords="stepper driver motor wiringpi arm raspberry pi",
-    url="http://example.com/HelloWorld/",   
+    url="https://github.com/eatdust/wipistepper",
 )
