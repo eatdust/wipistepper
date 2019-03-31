@@ -177,7 +177,12 @@ some ramp angle (degramp).
 ### Real world example
 
 I have been developping these modules to control an old 16mm film
-projector that has been transformed into a HDR film scanner :)
+projector that has been transformed into a HDR film scanner. That
+thing requires some more than 3A stepper motor for getting enough
+torque. All the public codes I was able to find were controlling toy
+steppers, and directly plugged to the RPI. You may not want 3A to pass
+through your RPI, in fact, you never want a stepper directly connected
+to your RPI for many other reasons...
 
 The stepper allows to move and scan the film frame per frame at a very low
 speed, as well as running it full speed at 24 frames/second, i.e., up to
