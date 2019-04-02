@@ -151,7 +151,7 @@ and some can be skipped depending on what the operating system is
 prioritizing. You won't be able to reach high speed with software
 generated pulses.
 
-The method *motor.pwnrun_while()* does exactly the same using the
+The method *motor.pwmrun_while()* does exactly the same using the
 PWM of the RPI, clock frequency can go up to a few MHz and you can
 easily reach more than 1000 rpm, provided your stepper keeps it
 torque at high speed. To understand the RPI's PWM, have a look to the [wiringpi
@@ -179,14 +179,13 @@ some ramp angle (degramp).
 I have been developping these modules to control an old 16mm film
 projector that has been transformed into a HDR film scanner. That
 thing requires some more than 3A stepper motor for getting enough
-torque. All the public codes I was able to find were controlling toy
-steppers, and directly plugged to the RPI. You may not want 3A to pass
-through your RPI, in fact, you never want a stepper directly connected
-to your RPI for many other reasons...
+torque. All the public codes I was able to find were software
+controlling toy steppers that did not need to move at 1440 rpm.
 
-The stepper allows to move and scan the film frame per frame at a very low
-speed, as well as running it full speed at 24 frames/second, i.e., up to
-1440 rpm, to actually project the movie.
+The stepper is used to move the film frame per frame, precisely, to
+allow for the digital camera to take and dump pictures. It is also
+used at very high speeds, up to 24 frames/second (1440 rpm), to
+actually allow for dumping the sound track and projecting the movie.
 
 Here a picture of the stepper motor, the driver board and the RPI:
 
