@@ -182,10 +182,11 @@ thing requires some more than 3A stepper motor for getting enough
 torque. All the public codes I was able to find were software
 controlling toy steppers that did not need to move at 1440 rpm.
 
-The stepper is used to move the film frame per frame, precisely, to
-allow for the digital camera to take and dump pictures. It is also
-used at very high speeds, up to 24 frames/second (1440 rpm), to
-actually allow for dumping the sound track and projecting the movie.
+The stepper is used to move the film frame per frame, accurately, to
+allow for the digital camera to take and dump pictures in between. But
+it is also used at very high speeds, up to 24 frames/second (1440
+rpm), to actually allow for dumping the sound track and/or projecting the
+movie.
 
 Here a picture of the stepper motor, the driver board and the RPI:
 
