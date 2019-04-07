@@ -201,4 +201,4 @@ driving board may require a completely different one)
 ![wiring](/docs/wiring.jpg?raw=true)
 ---
 
-For the film scanner code, see [goscan](https://github.com/eatdust/goscan).
+For the film scanner code, see [fbfscan](https://github.com/eatdust/fbfscan).
