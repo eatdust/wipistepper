@@ -120,9 +120,9 @@ rotation. Voltage states for these wires are initially set to 1,
 0, 0 (my board wiring switches the motor off for en=1).
 
 The driver board is in stepmode=8, the motor has a step angle of 1.8
-degrees and we want to generate software pulses of 10 milliseconds
+degrees and we want to generate software pulses of 10 microseconds
 width (these should be set to what the driving board is capable of).
-For the PWM, a pulse width of 8 milliseconds is set over a range of
+For the PWM, a pulse width of 8 microseconds is set over a range of
 4096.
 
 
@@ -146,7 +146,7 @@ The method *motor.softrun_while()* generates clock pulses sent to the
 driver, through the 'clk' gate, to accelerate the motor to *rpm*
 angular speed with a *rpmps* acceleration. The motor will stay at
 maximum speed during *msrun=5000* milliseconds. Then it decelerates
-and stop. Pulses are software generated, they are not very accurate
+and stops. Pulses are software generated, they are not very accurate
 and some can be skipped depending on what the operating system is
 prioritizing. You won't be able to reach high speed with software
 generated pulses.
