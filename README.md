@@ -153,7 +153,7 @@ generated pulses.
 
 The method *motor.pwmrun_while()* does exactly the same using the
 PWM of the RPI, clock frequency can go up to a few MHz and you can
-easily reach more than 1000 rpm, provided your stepper keeps it
+easily reach more than 1000 rpm, provided your stepper keeps its
 torque at high speed. To understand the RPI's PWM, have a look to the [wiringpi
 doc](http://wiringpi.com/reference/raspberry-pi-specifics/).
 
@@ -169,24 +169,25 @@ motor.reset()
 ```
 
 The method *motor.softun_to()* allows to move the motor by a given
-angle (degrun) with a given acceleration (rpmps) that applies only during
-some ramp angle (degramp).
+angle (degrun) with a given acceleration (rpmps) that applies only
+during some ramp angle (degramp). Therefore, the maximal speed reached
+is uniquely set by the values of degramp and rpmps. Deceleration also
+uses the same values.
 
 ---
 
 ### Real world example
 
 I have been developping these modules to control an old 16mm film
-projector that has been transformed into a HDR film scanner. That
-thing requires some more than 3A stepper motor for getting enough
-torque. All the public codes I was able to find were software
-controlling toy steppers that did not need to move at 1440 rpm.
+projector that has been transformed into a HDR film scanner.
 
 The stepper is used to move the film frame per frame, accurately, to
 allow for the digital camera to take and dump pictures in between. But
-it is also used at very high speeds, up to 24 frames/second (1440
-rpm), to actually allow for dumping the sound track and/or projecting the
-movie.
+it is also used at very high speeds, up to 24 frames/second, i.e., 1440
+rpm, to actually allow for dumping the sound track and/or projecting the
+movie. That thing requires some more than 3A stepper motor for getting enough
+torque. All the public codes I was able to find were software
+controlling toy steppers that did not need to move at 1440 rpm.
 
 Here a picture of the stepper motor, the driver board and the RPI:
 
