@@ -139,7 +139,7 @@ class driver(object):
         wp.pwmSetClock(clockDivider)
         self.clockwidth = us
         self.clockdivider = clockDivider
-        self.clockshift = clockDivider/ClockFredMHz - us
+        self.clockshift = clockDivider/ClockFreqMHz - us
 
     def set_clockdivider(self,divider):
         wp.pwmSetClock(divider)
