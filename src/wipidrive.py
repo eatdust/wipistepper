@@ -139,17 +139,22 @@ class driver(object):
         wp.pwmSetClock(clockDivider)
         self.clockwidth = us
         self.clockdivider = clockDivider
+        self.clockshift = clockDivider/ClockFredMHz - us
 
     def set_clockdivider(self,divider):
         wp.pwmSetClock(divider)
         self.clockdivider = divider
-        self.clockwidth = divider/ClockFreqMHz        
+        self.clockwidth = divider/ClockFreqMHz
+        self.clockshift = 0
         
     def get_clockwidth(self):
         return self.clockwidth
 
     def get_clockdivider(self):
         return self.clockdivider
+
+    def get_clockshift(self):
+        return self.clockshift
 
 #another way to set the range, for data=1 (min non-vanishing duty
 #cycle), this is the longest possible clocktime between two ticks
